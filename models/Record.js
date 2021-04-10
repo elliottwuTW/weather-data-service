@@ -5,6 +5,10 @@ const recordSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  city_en: {
+    type: String,
+    required: true
+  },
   windSpeed: {
     type: String,
     required: true
