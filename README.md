@@ -1,18 +1,21 @@
 ## Weather data backend API
 Backend API server for weather data service
 
+### Server url
+https://weather-data-service.herokuapp.com
+
 ### Endpoint
 #### Auth
 - Register an api key
   - HTTP Method: `POST`
-  - Url: `/api/{version}/auth/register`
+  - Path: `/api/{version}/auth/register`
   - Body
     `{ email: YOUR_EMAIL }`
 
 #### Weather Data
 - Get weather data
   - HTTP Method: `GET`
-  - Url: `/api/{version}/records/latest?city={cityEnglishName}`
+  - Path: `/api/{version}/records/latest?city={cityEnglishName}`
   - Headers
     `x-api-key: YOUR_API_KEY`
   
