@@ -4,14 +4,25 @@ const dotenv = require('dotenv')
 // read environment variables
 dotenv.config()
 
+// connect to MongoDB
 require('./config/mongoose')
-const saveWeatherData = require('./utils/saveWeatherData')
-
-// record the open weather data periodically
-setInterval(saveWeatherData, 3000)
 
 const app = express()
 const PORT = process.env.PORT
+
+// modules
+const routes = require('./routes')
+const errorHandler = require('./middleware/errorHandler')
+const saveWeatherData = require('./utils/saveWeatherData')
+
+// record the open weather data periodically
+setInterval(saveWeatherData, 100000)
+
+app.use(express.json())
+app.use('/api/v1', routes)
+
+// error handler
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`This server is running in ${process.env.NODE_ENV} mode on port ${PORT}`)

@@ -36,6 +36,10 @@ const recordSchema = new mongoose.Schema({
   obsTime: {
     type: Date,
     required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 })
 
