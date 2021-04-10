@@ -6,12 +6,9 @@ const asyncWrapper = require('./asyncWrapper')
 // maximum api calls limit per day
 const MAX_CALL_PER_DAY = 25
 
-// only allow the request that has both apiKey and the same origin when user registration
+// only allow the request that has valid apiKey
 exports.protect = asyncWrapper(async (req, res, next) => {
-  const user = await User.findOne({
-    apiKey: req.header('x-api-key'),
-    host: req.headers.host
-  })
+  const user = await User.findOne({ apiKey: req.header('x-api-key') })
   if (!user) return next(new ErrorRes(401, 'Unauthorized access'))
   req.user = user
   next()

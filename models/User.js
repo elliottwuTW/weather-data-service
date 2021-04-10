@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  host: {
-    type: String,
-    required: true
-  },
   usage: [{
     date: Date,
     count: Number

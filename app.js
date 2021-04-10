@@ -1,5 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const cors = require('cors')
 
 // read environment variables
 dotenv.config()
@@ -19,6 +20,7 @@ const saveWeatherData = require('./utils/saveWeatherData')
 setInterval(saveWeatherData, 60 * 60 * 1000)
 
 app.use(express.json())
+app.use(cors())
 app.use('/api/v1', routes)
 
 // error handler

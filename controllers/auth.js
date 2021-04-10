@@ -18,7 +18,6 @@ exports.register = asyncWrapper(async (req, res, next) => {
   user = await User.create({
     email: req.body.email,
     apiKey: genApiKey(),
-    host: req.headers.host,
     usage: []
   })
   return res.status(201).json({
