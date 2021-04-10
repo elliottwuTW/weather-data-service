@@ -17,7 +17,7 @@ const errorHandler = require('./middleware/errorHandler')
 const saveWeatherData = require('./utils/saveWeatherData')
 
 // record the open weather data periodically
-setInterval(saveWeatherData, 60 * 60 * 1000)
+setInterval(saveWeatherData, 60 * 1000)
 
 app.use(express.json())
 app.use(cors())
