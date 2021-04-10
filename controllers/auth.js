@@ -15,12 +15,11 @@ exports.register = asyncWrapper(async (req, res, next) => {
   user = await User.findOne({ email: req.body.email })
   if (user) return next(new ErrorRes(400, 'Email is in use'))
   // register
-  const today = (new Date()).toISOString().slice(0, 10)
   user = await User.create({
     email: req.body.email,
     apiKey: genApiKey(),
     host: req.headers.host,
-    usage: [{ date: new Date(today), count: 0 }]
+    usage: []
   })
   return res.status(201).json({
     status: 'success',
