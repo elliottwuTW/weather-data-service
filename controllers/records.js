@@ -18,6 +18,7 @@ exports.createRecords = async (cityDataArray) => {
       maxTemp: weatherElement[14].elementValue,
       minTemp: weatherElement[16].elementValue,
       weather: weatherElement[20].elementValue,
+      // UTC+08:00
       obsTime: new Date(dateTime[0] + 'T' + dateTime[1] + '.000+08:00')
     }
     // create a record
@@ -30,17 +31,27 @@ exports.createRecords = async (cityDataArray) => {
 // @route     GET /api/v1/records/latest
 // @access    Protected
 exports.getLatestRecords = asyncWrapper(async (req, res, next) => {
-  const { city } = req.query
+  const selectedFields = ['city', 'windSpeed', 'temperature', 'humidity', 'pressure', 'maxTemp', 'minTemp', 'weather', 'obsTime'].join(' ')
+
   let records
-  if (city) {
-    records = await Record.find({ city_en: city }).sort('-createdAt').limit(1)
+  if (req.query.city) {
+    // query weather data of a specific city
+    records = await Record.find({ city_en: req.query.city })
+      .sort('-createdAt')
+      .select(selectedFields)
+      .limit(1)
   } else {
+    // query all cities weather data
     const recordPromises = ['Taipei', 'NewTaipei', 'Taoyuan'].map(city =>
-      Record.find({ city_en: city }).sort('-createdAt').limit(1))
+      Record.find({ city_en: city })
+        .sort('-createdAt')
+        .select(selectedFields)
+        .limit(1))
     records = await Promise.all(recordPromises)
     // flatten
     records = records.map(recordArr => recordArr[0])
   }
+
   return res.status(200).json({
     status: 'success',
     data: records
