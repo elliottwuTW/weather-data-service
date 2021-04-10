@@ -1,4 +1,5 @@
 const Record = require('../models/Record')
+const asyncWrapper = require('../middleware/asyncWrapper')
 
 // @desc      Create multiple weather records
 // @route     -
@@ -24,6 +25,27 @@ exports.createRecords = async (cityDataArray) => {
   })
   return await Promise.all(promises)
 }
+
+// @desc      Get the latest weather data of cities
+// @route     GET /api/v1/records/latest
+// @access    Protected
+exports.getLatestRecords = asyncWrapper(async (req, res, next) => {
+  const { city } = req.query
+  let records
+  if (city) {
+    records = await Record.find({ city_en: city }).sort('-createdAt').limit(1)
+  } else {
+    const recordPromises = ['Taipei', 'NewTaipei', 'Taoyuan'].map(city =>
+      Record.find({ city_en: city }).sort('-createdAt').limit(1))
+    records = await Promise.all(recordPromises)
+    // flatten
+    records = records.map(recordArr => recordArr[0])
+  }
+  return res.status(200).json({
+    status: 'success',
+    data: records
+  })
+})
 
 /**
  * Functions
